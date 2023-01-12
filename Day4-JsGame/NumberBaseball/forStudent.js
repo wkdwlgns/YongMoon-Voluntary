@@ -1,4 +1,4 @@
-const ANSWER = []; // 정답 
+const ANSWER = []; // 정답
 const ANSWERSHEET = [];
 var tryCount = 0;
 
@@ -7,7 +7,7 @@ const makeAnswer = () => {
     console.log(ANSWER);
 };
 
-const getRandomAnswerList = () => { // 정답을 만드는 함수로 [6, 3, 1, 9]과 같은 형식으로 정답을 만들게 된다. 
+const getRandomAnswerList = () => { // 정답을 만드는 함수로 [6, 3, 1, 9]과 같은 형식으로 정답을 만들게 된다.
     let answer;
     for (i = 1; i <= 4; i++) {
         answer = randomNumber(1, 9);
@@ -18,20 +18,12 @@ const getRandomAnswerList = () => { // 정답을 만드는 함수로 [6, 3, 1, 9
     }
 };
 
-const randomNumber = (n, m) => { // n부터 m까지의 랜덤한 숫자를 만드는 난수 발생 함수를 만드세요! return 타입은 INT입니다!
-    /* 
-     * n에는 시작 값이 들어오고, m에는 끝 값이 들어오게 되며
-     * n~m까지의 난수를 발생시키는 random 함수를 만드세요!
-     * return 타입은 정수 타입인 INT입니다!
-     */
+const randomNumber = (n, m) => {
+    return parseInt(Math.random() * (m - n + 1)) + n;
 };
 
-const isAnswerDuplicate = (answer, ANSWER) => { // answer라는 랜덤한 숫자가 ANSWER라는 정답 Array에 포함되어있는지 확인하는 함수를 만드세요! return 타입은 Boolean입니다.
-	/* 
-     * answer에는 난수로 발생된 1~9사이의 랜덤한 숫자가, ANSWER는 지금까지 만들어진 답안 [9, 3, 2] or [] or [1, 6]과 같은 형식이 들어오게 된다.
-     * ANSWER에 answer가 포함되어있는지 확인하는 함수를 만드세요!
-     * return 타입은 true나 false의 형태인 Boolean타입으로 리턴해야합니다! 
-     */
+const isAnswerDuplicate = (answer, ANSWER) => {
+    return ANSWER.includes(answer);
 };
 
 //-------------------- main code --------------------
@@ -88,12 +80,12 @@ const getBallList = () => { // 어떤 공들이 제출되었나 확인하는 함
     return ballList;
 };
 
-const isAllBallExist = (ballList) => { // 드래그를 통해 올린 Ball이 포함되어 있는 ballList라는 Array에서 공 4개가 존재하는 확인하는 함수를 만드세요! return 타입은 Boolean입니다.
-    /* 
-     * ballList는 [9, 3, 2, 1]과 같이 제출된 공들의 배열로 전달되게 됩니다.
-     * 모든 공들, 즉 4개의 공이 ballList에 들어가있는지 확인하는 함수를 만드세요!
-     * return 타입은 true나 false의 형태인 Boolean타입으로 리턴해야합니다! 
-     */
+const isAllBallExist = (ballList) => {
+    if (ballList.length == 4) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
 const checkStrikeBall = (ballList) => { // 제출된 볼들에서 Strike와 Ball의 갯수를 Object타입으로 리턴하는 함수
@@ -103,22 +95,25 @@ const checkStrikeBall = (ballList) => { // 제출된 볼들에서 Strike와 Ball
     return { strike: strikeCount, ball: ballCount };
 };
 
-const checkStrike = (ballList) => { // ballList의 제출된 ball들과 ANSWER라는 정답 Array를 비교하여 Strike의 갯수를 찾는 함수를 만드세요! return 타입은 INT 형태입니다.
-    /* 
-     * ballList는 [9, 3, 2, 1]과 같이 제출된 공들의 배열로 전달되게 됩니다.
-     * 우리에게 주어진 ANSWER라는 배열과 ballList를 비교하여 위치와 숫자까지 모두 같으면 스트라이크라고 취급합니다. [1, 5, 2, 7]과 [6, 5, 7, 2]라면 1스트라이크, [1, 5, 2, 7]과 [1, 5, 7, 2]라면 2스트라이크입니다.
-     * 이렇게 몇 스트라이크인지 구하는 함수를 만드세요!
-     * return 타입은 정수형인 INT 타입입니다! 스트라이크가 몇개인지 리턴하세요! 
-     */
+const checkStrike = (ballList) => {
+    let strikeCount = 0;
+    for (i = 0; i < 4; i++) {
+        if (ANSWER[i] == ballList[i]) {
+            strikeCount++;
+        }
+    }
+    return strikeCount;
 };
 
-const checkBall = (ballList, strikeCount) => { // ballList의 제출된 ball들과 ANSWER라는 정답 Array, 그리고 strikeCount라는 스트라이크 갯수를 참고하여 볼(야구용어)의 갯수를 찾는 함수를 만드세요! return 타입은 INT 형태입니다.
-    /* 
-     * ballList는 [9, 3, 2, 1]과 같이 제출된 공들의 배열로 전달되게 되며 strikeCount는 strike의 갯수를 INT타입으로 전달하게 됩니다.
-     * 우리에게 주어진 ANSWER라는 배열과 ballList를 비교하여 스트라이크를 제외하고 같은 숫자의 갯수를 볼으로 취급합니다. [1, 5, 2, 7]과 [6, 5, 7, 2]라면 1스트라이크 2볼, [1, 5, 2, 7]과 [1, 5, 7, 2]라면 2스트라이크 2볼입니다.
-     * 이렇게 몇 볼인지 구하는 함수를 만드세요!
-     * return 타입은 정수형인 INT 타입입니다! 스트라이크가 몇개인지 리턴하세요! 
-     */
+const checkBall = (ballList, strikeCount) => {
+    let setBallList = new Set(ballList);
+    let ballCount = 0;
+    for (i = 0; i < 4; i++) {
+        if (setBallList.has(String(ANSWER[i]))) {
+            ballCount++;
+        }
+    }
+    return ballCount - strikeCount;
 };
 
 const isBallInANSWERSHEET = (savingBallList) => { // 공들이 이전에 있었던 조합으로 제출되었나 확인하는 함수
